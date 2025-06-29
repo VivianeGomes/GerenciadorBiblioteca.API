@@ -1,0 +1,36 @@
+# Compilação
+bin/
+obj/
+*.dll
+*.exe
+
+**/bin/
+**/obj/
+
+# Visual Studio
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+*.vs/
+
+# Configs locais
+*.cache
+*.log
+
+# Testes
+TestResults/
+*.coverage
+*.trx
+
+# IDEs alternativas
+.idea/
+
+# Pacotes & dependências
+*.nupkg
+packages/
+*.snupkg
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
