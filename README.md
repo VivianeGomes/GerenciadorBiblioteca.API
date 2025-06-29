@@ -1,6 +1,6 @@
 # 📚 Scriptoria – Gerenciador de Biblioteca
 
-Sistema modular para gerenciamento de acervo, usuários e empréstimos de uma biblioteca.  
+Sistema modular para gerenciamento de acervo, usuários e empréstimos de uma biblioteca.
 Desenvolvido com foco em boas práticas de **arquitetura limpa**, separação de responsabilidades e evolução entre **Console App → API REST**.
 
 ---
@@ -42,8 +42,10 @@ GerenciadorBiblioteca.sln
 
 ## 🔖 Status do Projeto
 
-📍 **Versão 1: Console App** – em desenvolvimento  
-🌐 **Versão 2: Web API** – em planejamento  
+📍  **Versão 1: Console App** – em desenvolvimento
+
+🌐 **Versão 2: Web API** – em planejamento
+
 🧪 **Testes unitários** – estrutura inicial criada
 
 ---
