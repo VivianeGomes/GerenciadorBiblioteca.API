@@ -1,4 +1,4 @@
-name: PR Automática com gh CLI
+name: PR Automática com GitHub CLI 💜
 
 on:
   push:
@@ -13,21 +13,24 @@ jobs:
       - name: 🔄 Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: 🛠️ Verifica se o GitHub CLI está instalado
+      - name: 🧪 Verifica se gh CLI está disponível
         run: |
           if ! command -v gh &> /dev/null; then
-            echo "GitHub CLI não encontrado. Instalando..."
+            echo "🔧 Instalando GitHub CLI..."
             sudo apt update && sudo apt install gh -y
           else
-            echo "GitHub CLI já está instalado."
+            echo "✅ GitHub CLI já está disponível."
           fi
 
       - name: ✨ Cria Pull Request automaticamente
         run: |
+          echo "🔍 Branch atual: ${{ github.ref_name }}"
+          echo "📬 Criando PR da branch '${{ github.ref_name }}' para 'main'..."
+
           gh pr create \
             --title "✨ PR automática: ${{ github.ref_name }}" \
-            --body "Essa PR foi gerada automaticamente após push na branch `${{ github.ref_name }}`." \
+            --body "Essa Pull Request foi gerada automaticamente após push na branch `${{ github.ref_name }}`." \
             --base main \
-            --head ${{ github.ref_name }}
+            --head "${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
