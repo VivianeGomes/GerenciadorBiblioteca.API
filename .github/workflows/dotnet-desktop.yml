@@ -27,10 +27,12 @@ jobs:
           echo "🔍 Branch atual: ${{ github.ref_name }}"
           echo "📬 Criando PR da branch '${{ github.ref_name }}' para 'main'..."
 
+          gh pr list --head "$(echo '${{ github.ref }}' | sed 's/refs\/heads\///')" --json number
+
           gh pr create \
             --title "✨ PR automática: ${{ github.ref_name }}" \
             --body "Essa Pull Request foi gerada automaticamente após push na branch `${{ github.ref_name }}`." \
             --base main \
-            --head "${{ github.ref_name }}"
+            --head "$(echo '${{ github.ref }}' | sed 's/refs\/heads\///')"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
