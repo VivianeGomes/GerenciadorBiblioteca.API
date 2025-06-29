@@ -1,0 +1,22 @@
+name: Create PR automaticamente
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+jobs:
+  auto-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cria Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "✨ PR automática: ${{ github.ref_name }}"
+          body: "Essa Pull Request foi gerada automaticamente após push na branch `${{ github.ref_name }}`."
+          commit-message: "feat: criação automática de PR"
+          branch: ${{ github.ref_name }}
+          base: main
