@@ -22,17 +22,24 @@ jobs:
             echo "✅ GitHub CLI já está disponível."
           fi
 
-      - name: ✨ Cria Pull Request automaticamente
+      - name: ✨ Cria Pull Request automaticamente (se ainda não existir)
         run: |
-          echo "🔍 Branch atual: ${{ github.ref_name }}"
-          echo "📬 Criando PR da branch '${{ github.ref_name }}' para 'main'..."
+          echo "🔍 Ref recebido: ${{ github.ref }}"
+          HEAD_BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+          echo "🌿 Branch de origem: $HEAD_BRANCH"
 
-          gh pr list --head "$(echo '${{ github.ref }}' | sed 's/refs\/heads\///')" --json number
+          EXISTING_PR=$(gh pr list --head "$HEAD_BRANCH" --base main --json number --jq '.[0].number')
 
-          gh pr create \
-            --title "✨ PR automática: ${{ github.ref_name }}" \
-            --body "Essa Pull Request foi gerada automaticamente após push na branch `${{ github.ref_name }}`." \
-            --base main \
-            --head "$(echo '${{ github.ref }}' | sed 's/refs\/heads\///')"
+          if [ -n "$EXISTING_PR" ]; then
+            echo "ℹ️ Já existe uma PR (#$EXISTING_PR) da branch '$HEAD_BRANCH' para 'main'. Nada a fazer."
+          else
+            echo "📬 Criando nova Pull Request..."
+            gh pr create \
+              --title "✨ PR automática: $HEAD_BRANCH" \
+              --body "Essa Pull Request foi gerada automaticamente após push na branch \`$HEAD_BRANCH\`." \
+              --base main \
+              --head "$HEAD_BRANCH"
+            echo "✅ Pull Request criada com sucesso!"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
