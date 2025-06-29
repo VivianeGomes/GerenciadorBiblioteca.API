@@ -1,22 +1,33 @@
-name: Create PR automaticamente
+name: PR Automática com gh CLI
 
 on:
   push:
     branches:
-      - 'feature/**'
+      - "feature/**"
 
 jobs:
-  auto-pr:
+  criar-pr:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Cria Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "✨ PR automática: ${{ github.ref_name }}"
-          body: "Essa Pull Request foi gerada automaticamente após push na branch `${{ github.ref_name }}`."
-          commit-message: "feat: criação automática de PR"
-          branch: ${{ github.ref_name }}
-          base: main
+    steps:
+      - name: 🔄 Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Verifica se o GitHub CLI está instalado
+        run: |
+          if ! command -v gh &> /dev/null; then
+            echo "GitHub CLI não encontrado. Instalando..."
+            sudo apt update && sudo apt install gh -y
+          else
+            echo "GitHub CLI já está instalado."
+          fi
+
+      - name: ✨ Cria Pull Request automaticamente
+        run: |
+          gh pr create \
+            --title "✨ PR automática: ${{ github.ref_name }}" \
+            --body "Essa PR foi gerada automaticamente após push na branch `${{ github.ref_name }}`." \
+            --base main \
+            --head ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
