@@ -58,7 +58,7 @@ namespace GerenciadorBiblioteca.Infra.Services
             return _emprestimoRepository.ObterPorId(id);
         }
 
-        private void DefinirDataDevolucao(Guid idEmprestimo, DateTime? dataDevolucao)
+        public void DefinirDataDevolucao(Guid idEmprestimo, DateTime? dataDevolucao)
         {
             ValidadorObrigatorio.ValidarGuid(idEmprestimo, nameof(idEmprestimo));
 

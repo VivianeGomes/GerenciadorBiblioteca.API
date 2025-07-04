@@ -1,4 +1,4 @@
-﻿using GerenciadorBiblioteca.Domain.Interfaces;
+﻿using GerenciadorBiblioteca.App.Menus;
 using GerenciadorBiblioteca.Infra.Repositories;
 using GerenciadorBiblioteca.Infra.Services;
 
@@ -26,13 +26,13 @@ while (continuar)
     switch (opcao)
     {
         case "1":
-            MenuLivros(livroService);
+            MenuLivro.Exibir(livroService);
             break;
         case "2":
-            MenuUsuarios(usuarioService);
+            MenuUsuario.Exibir(usuarioService);
             break;
         case "3":
-            MenuEmprestimos(emprestimoService);
+            MenuEmprestimo.Exibir(emprestimoService);
             break;
         case "0":
             continuar = false;
@@ -40,58 +40,7 @@ while (continuar)
             break;
         default:
             Console.WriteLine("\nOpção inválida. Pressione qualquer tecla para tentar novamente.");
+            Console.ReadKey();
             break;
-    }
-}
-
-void MenuEmprestimos(EmprestimoService emprestimoService)
-{
-    throw new NotImplementedException();
-}
-
-void MenuUsuarios(UsuarioService usuarioService)
-{
-    throw new NotImplementedException();
-}
-
-static void MenuLivros(LivroService livroService)
-{
-    bool voltar = false;
-
-    while (!voltar)
-    {
-        Console.Clear();
-        Console.WriteLine("=== 📚 Gerenciamento de Livros ===\n");
-        Console.WriteLine("1. Cadastrar Livro");
-        Console.WriteLine("2. Listar Todos os Livros");
-        Console.WriteLine("3. Buscar Livro por ID");
-        Console.WriteLine("4. Remover Livro");
-        Console.WriteLine("0. Voltar ao menu principal");
-        Console.Write("\nEscolha uma opção: ");
-
-        var opcao = Console.ReadLine();
-
-        switch (opcao)
-        {
-            case "1":
-                CadastrarLivro(livroService);
-                break;
-            case "2":
-                ListarLivros(livroService);
-                break;
-            case "3":
-                BuscarLivroPorId(livroService);
-                break;
-            case "4":
-                RemoverLivro(livroService);
-                break;
-            case "0":
-                voltar = true;
-                break;
-            default:
-                Console.WriteLine("Opção inválida. Pressione qualquer tecla para continuar...");
-                Console.ReadKey();
-                break;
-        }
     }
 }
