@@ -6,6 +6,7 @@
         public Guid IdUsuario { get; set; }
         public Guid IdLivro { get; set; }
         public DateTime DataDeEmprestimo { get; set; } = DateTime.Now;
+        public DateTime? DataDevolucao { get; set; } = null;
 
         public Emprestimo() { }
 

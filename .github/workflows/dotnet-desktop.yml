@@ -1,22 +1,45 @@
-name: Create PR automaticamente
+name: PR Automática com GitHub CLI 💜
 
 on:
   push:
     branches:
-      - 'feature/**'
+      - "feature/**"
 
 jobs:
-  auto-pr:
+  criar-pr:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Cria Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "✨ PR automática: ${{ github.ref_name }}"
-          body: "Essa Pull Request foi gerada automaticamente após push na branch `${{ github.ref_name }}`."
-          commit-message: "feat: criação automática de PR"
-          branch: ${{ github.ref_name }}
-          base: main
+    steps:
+      - name: 🔄 Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: 🧪 Verifica se gh CLI está disponível
+        run: |
+          if ! command -v gh &> /dev/null; then
+            echo "🔧 Instalando GitHub CLI..."
+            sudo apt update && sudo apt install gh -y
+          else
+            echo "✅ GitHub CLI já está disponível."
+          fi
+
+      - name: ✨ Cria Pull Request automaticamente (se ainda não existir)
+        run: |
+          echo "🔍 Ref recebido: ${{ github.ref }}"
+          HEAD_BRANCH=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+          echo "🌿 Branch de origem: $HEAD_BRANCH"
+
+          EXISTING_PR=$(gh pr list --head "$HEAD_BRANCH" --base main --json number --jq '.[0].number')
+
+          if [ -n "$EXISTING_PR" ]; then
+            echo "ℹ️ Já existe uma PR (#$EXISTING_PR) da branch '$HEAD_BRANCH' para 'main'. Nada a fazer."
+          else
+            echo "📬 Criando nova Pull Request..."
+            gh pr create \
+              --title "✨ PR automática: $HEAD_BRANCH" \
+              --body "Essa Pull Request foi gerada automaticamente após push na branch \`$HEAD_BRANCH\`." \
+              --base main \
+              --head "$HEAD_BRANCH"
+            echo "✅ Pull Request criada com sucesso!"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
