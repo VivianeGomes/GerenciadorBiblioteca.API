@@ -14,11 +14,14 @@ bool continuar = true;
 while (continuar)
 {
     Console.Clear();
-    Console.WriteLine("=== Scriptoria – Gerenciador de Biblioteca ===\n");
-    Console.WriteLine("1. 📚 Livros");
-    Console.WriteLine("2. 👤 Usuários");
-    Console.WriteLine("3. 📖 Empréstimos");
-    Console.WriteLine("0. ❌ Sair");
+    Console.WriteLine("╔══════════════════════════════════════════════╗");
+    Console.WriteLine("║         Scriptoria – Menu Principal         ║");
+    Console.WriteLine("╠══════════════════════════════════════════════╣");
+    Console.WriteLine("║ 1. Livros                                    ║");
+    Console.WriteLine("║ 2. Usuários                                  ║");
+    Console.WriteLine("║ 3. Empréstimos                               ║");
+    Console.WriteLine("║ 0. Sair                                      ║");
+    Console.WriteLine("╚══════════════════════════════════════════════╝");
     Console.Write("\nEscolha uma opção: ");
 
     var opcao = Console.ReadLine();
