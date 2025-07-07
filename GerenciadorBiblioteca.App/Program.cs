@@ -1,32 +1,40 @@
 ﻿using GerenciadorBiblioteca.App.Menus;
 using GerenciadorBiblioteca.Infra.Repositories;
 using GerenciadorBiblioteca.Infra.Services;
+using System.Text;
 using System.Threading;
 
+Console.OutputEncoding = Encoding.UTF8;
+
+// ✦ Função auxiliar: digita letra por letra
+static void ExibirTextoComEfeito(string texto, int delay = 30)
+{
+    foreach (char c in texto)
+    {
+        Console.Write(c);
+        Thread.Sleep(delay);
+    }
+    Console.WriteLine();
+}
+
+// ✦ Abertura encantada com efeito de digitação
 static void AnimacaoDeAbertura()
 {
-    string[] frames =
-    {
-        "",
-        "              ░▒▓ S C R I P T O R I A ▓▒░              ",
-        "     Biblioteca encantada... carregando magia arcana... ",
-        "",
-        "                ✧ ⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯ ⋯⋯ ⋯ ✧                ",
-        "                ░▒▓ Bem-vinda, Guardiã do Conhecimento ▓▒░",
-        "                ✧ ⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯ ⋯⋯ ⋯ ✧                "
-    };
-
-    foreach (string frame in frames)
-    {
-        Console.Clear();
-        Console.WriteLine("\n\n");
-        Console.WriteLine(frame);
-        Thread.Sleep(600);
-    }
-
-    Thread.Sleep(1000);
+    Console.Clear();
+    Console.WriteLine();
+    ExibirTextoComEfeito("░▒▓ S C R I P T O R I A ▓▒░", 50);
+    Thread.Sleep(500);
+    ExibirTextoComEfeito("Biblioteca encantada... despertando vestígios arcanos...", 30);
+    Thread.Sleep(600);
+    Console.WriteLine();
+    ExibirTextoComEfeito("✧⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯✧", 25);
+    ExibirTextoComEfeito("░▒▓ Bem-vinda, Guardiã do Conhecimento ▓▒░", 40);
+    ExibirTextoComEfeito("✧⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯⋯✧", 25);
+    Thread.Sleep(1200);
     Console.Clear();
 }
+
+// ✨ Início do programa
 AnimacaoDeAbertura();
 
 var livroService = new LivroService(new LivroRepository());
@@ -69,8 +77,8 @@ while (continuar)
         case "0":
             continuar = false;
             Console.Clear();
-            Console.WriteLine("\n⟡ As portas da Scriptoria se fecham lentamente... Até breve. ⟡");
-            Thread.Sleep(1500);
+            ExibirTextoComEfeito("⟡ As portas da Scriptoria se fecham lentamente... Até breve. ⟡", 40);
+            Thread.Sleep(1000);
             break;
         default:
             Console.ForegroundColor = ConsoleColor.Red;
