@@ -12,12 +12,15 @@ namespace GerenciadorBiblioteca.App.Menus
             while (continuar)
             {
                 Console.Clear();
-                Console.WriteLine("=== 📚 Gerenciamento de Livros ===\n");
-                Console.WriteLine("1. Cadastrar Livro");
-                Console.WriteLine("2. Listar Todos os Livros");
-                Console.WriteLine("3. Buscar Livro por ID");
-                Console.WriteLine("4. Remover Livro");
-                Console.WriteLine("0. Voltar ao Menu Principal");
+                Console.WriteLine("╔══════════════════════════════════════════════╗");
+                Console.WriteLine("║         Scriptoria – Gerenciar Livros        ║");
+                Console.WriteLine("╠══════════════════════════════════════════════╣");
+                Console.WriteLine("║ 1. Cadastrar Livro                           ║");
+                Console.WriteLine("║ 2. Listar Todos os Livros                    ║");
+                Console.WriteLine("║ 3. Buscar Livro por ID                       ║");
+                Console.WriteLine("║ 4. Remover Livro                             ║");
+                Console.WriteLine("║ 0. Voltar ao Menu Principal                  ║");
+                Console.WriteLine("╚══════════════════════════════════════════════╝");
                 Console.Write("\nEscolha uma opção: ");
 
                 var opcao = Console.ReadLine();
@@ -50,19 +53,23 @@ namespace GerenciadorBiblioteca.App.Menus
         private static void CadastrarLivro(LivroService livroservice)
         {
             Console.Clear();
-            Console.WriteLine("=== ✍️ Cadastro de Livro ===\n");
+            Console.WriteLine("╔══════════════════════════════════════════════╗");
+            Console.WriteLine("║           Scriptoria – Cadastro de Livro     ║");
+            Console.WriteLine("╠══════════════════════════════════════════════╣");
 
-            Console.WriteLine("Digite o título do livro:");
+            Console.Write("║ Título do livro: ");
             var titulo = Console.ReadLine();
 
-            Console.WriteLine("Digite o autor do livro:");
+            Console.Write("║ Autor do livro: ");
             var autor = Console.ReadLine();
 
-            Console.WriteLine("Digite o ISBN do livro:");
+            Console.Write("║ ISBN do livro: ");
             var isbn = Console.ReadLine();
 
-            Console.WriteLine("Digite o ano de publicação do livro:");
+            Console.Write("║ Ano de publicação: ");
             var anoString = Console.ReadLine();
+
+            Console.WriteLine("╚══════════════════════════════════════════════╝");
 
             int.TryParse(anoString, out int anoPublicacao);
 
@@ -91,26 +98,30 @@ namespace GerenciadorBiblioteca.App.Menus
         private static void ListarLivros(LivroService livroService)
         {
             Console.Clear();
-            Console.WriteLine("=== 📚 Lista de Livros Cadastrados ===\n");
+            Console.WriteLine("╔══════════════════════════════════════════════╗");
+            Console.WriteLine("║       Scriptoria – Livros Cadastrados       ║");
+            Console.WriteLine("╠══════════════════════════════════════════════╣\n");
 
             var livros = livroService.ListarTodos();
 
             if (!livros.Any())
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("⚠️ Nenhum livro cadastrado ainda.");
+                Console.WriteLine("⚠ Nenhum livro cadastrado ainda.");
                 Console.ResetColor();
             }
             else
             {
+                int contador = 1;
                 foreach (var livro in livros)
                 {
-                    Console.WriteLine($"🆔 ID: {livro.Id}");
-                    Console.WriteLine($"📖 Título: {livro.Titulo}");
-                    Console.WriteLine($"✍️ Autor: {livro.Autor}");
-                    Console.WriteLine($"📚 ISBN: {livro.Isbn}");
-                    Console.WriteLine($"📅 Ano de Publicação: {livro.AnoPublicacao}");
-                    Console.WriteLine(new string('=', 40));
+                    Console.WriteLine($"[{contador}] ID: {livro.Id}");
+                    Console.WriteLine($"     Título: {livro.Titulo}");
+                    Console.WriteLine($"     Autor: {livro.Autor}");
+                    Console.WriteLine($"     ISBN: {livro.Isbn}");
+                    Console.WriteLine($"     Ano de Publicação: {livro.AnoPublicacao}");
+                    Console.WriteLine(new string('-', 46));
+                    contador++;
                 }
             }
 
@@ -118,10 +129,12 @@ namespace GerenciadorBiblioteca.App.Menus
             Console.ReadKey();
         }
 
-        private static void BuscarLivroPorId(LivroService livroService) 
+        private static void BuscarLivroPorId(LivroService livroService)
         {
             Console.Clear();
-            Console.WriteLine("=== 🔍 Buscar Livro por ID ===\n");
+            Console.WriteLine("╔══════════════════════════════════════════════╗");
+            Console.WriteLine("║        Scriptoria – Buscar Livro por ID      ║");
+            Console.WriteLine("╠══════════════════════════════════════════════╣\n");
 
             Console.Write("Digite o ID do livro (ou cole um GUID): ");
             var idString = Console.ReadLine();
@@ -129,7 +142,7 @@ namespace GerenciadorBiblioteca.App.Menus
             if (!Guid.TryParse(idString, out Guid id))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n❌ ID inválido. Certifique-se de digitar um GUID válido.");
+                Console.WriteLine("\n[!] ID inválido. Certifique-se de digitar um GUID válido.");
                 Console.ResetColor();
             }
             else
@@ -139,16 +152,18 @@ namespace GerenciadorBiblioteca.App.Menus
                 if (livro is null)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n⚠️ Nenhum livro encontrado com esse ID.");
+                    Console.WriteLine("\n[!] Nenhum livro encontrado com esse ID.");
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"\n🆔 ID: {livro.Id}");
-                    Console.WriteLine($"📖 Título: {livro.Titulo}");
-                    Console.WriteLine($"✍️ Autor: {livro.Autor}");
-                    Console.WriteLine($"🔢 ISBN: {livro.Isbn}");
-                    Console.WriteLine($"📅 Ano de Publicação: {livro.AnoPublicacao}");
+                    Console.WriteLine("\n══════════════════════════════════════════════");
+                    Console.WriteLine($"ID.................: {livro.Id}");
+                    Console.WriteLine($"Título.............: {livro.Titulo}");
+                    Console.WriteLine($"Autor..............: {livro.Autor}");
+                    Console.WriteLine($"ISBN...............: {livro.Isbn}");
+                    Console.WriteLine($"Ano de Publicação..: {livro.AnoPublicacao}");
+                    Console.WriteLine("══════════════════════════════════════════════");
                 }
 
                 Console.ResetColor();
@@ -157,10 +172,13 @@ namespace GerenciadorBiblioteca.App.Menus
             Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
             Console.ReadKey();
         }
+
         private static void RemoverLivro(LivroService livroService)
         {
             Console.Clear();
-            Console.WriteLine("=== ❌ Remover Livro ===\n");
+            Console.WriteLine("╔══════════════════════════════════════════════╗");
+            Console.WriteLine("║          Scriptoria – Remover Livro          ║");
+            Console.WriteLine("╠══════════════════════════════════════════════╣\n");
 
             Console.Write("Digite o ID do livro a ser removido: ");
             var idString = Console.ReadLine();
@@ -168,7 +186,7 @@ namespace GerenciadorBiblioteca.App.Menus
             if (!Guid.TryParse(idString, out Guid id))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n❌ ID inválido. Certifique-se de digitar um GUID válido.");
+                Console.WriteLine("\n[!] ID inválido. Certifique-se de digitar um GUID válido.");
             }
             else
             {
@@ -177,12 +195,12 @@ namespace GerenciadorBiblioteca.App.Menus
                 if (sucesso)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("\n✅ Livro removido com sucesso!");
+                    Console.WriteLine("\n[OK] Livro removido com sucesso!");
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("\n⚠️ Nenhum livro encontrado com esse ID. Nada foi removido.");
+                    Console.WriteLine("\n[!] Nenhum livro encontrado com esse ID. Nada foi removido.");
                 }
             }
 
