@@ -5,10 +5,13 @@ on:
     branches:
       - "feature/**"
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   criar-pr:
     runs-on: ubuntu-latest
-
     steps:
       - name: 🔄 Checkout do repositório
         uses: actions/checkout@v4

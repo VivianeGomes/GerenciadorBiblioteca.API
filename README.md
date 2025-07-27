@@ -1,168 +1,165 @@
-# 📚 Scriptoria – Gerenciador de Biblioteca
+# 🧪 Documentação Técnica da API REST – Scriptoria
 
-Sistema modular para gestão de acervo, usuários e empréstimos de uma biblioteca.  
-Desenvolvido com foco em boas práticas de **arquitetura limpa**, separação de responsabilidades e evolução organizada de **Console App → API REST**.
-
----
-
-## ✨ Funcionalidades
-
-- 📖 Cadastro, listagem e remoção de livros
-- 👤 Gerenciamento de usuários
-- 🔁 Registro de empréstimos com histórico
-- 🔍 Consulta por ID com retorno amigável
-- ❌ Validações e mensagens de erro claras
-- 🧱 Estrutura modular: Domain, Infra, App, API
-- 🧪 Pronto para testes unitários
+Uma camada encantada que conecta o universo da aplicação aos desenvolvedores e consumidores externos — tudo com clareza, elegância e boas práticas REST. ✨
 
 ---
 
-## 🛠️ Tecnologias & Conceitos
+## 🚀 Como Executar a API Localmente
 
-- .NET (C#)
-- Arquitetura em camadas inspirada na Clean Architecture
-- Injeção de dependência
-- Console App com navegação interativa por menu
-- Planejamento para API com ASP.NET Core + Entity Framework Core
+🧰 Pré-requisitos:
 
----
-
-## 📂 Estrutura da Solução
-
-```
-
-GerenciadorBiblioteca.sln
-├── GerenciadorBiblioteca.Domain/ → Regras de negócio e entidades
-├── GerenciadorBiblioteca.Infra/ → Persistência e repositórios
-├── GerenciadorBiblioteca.App/ → Lógica de aplicação e orquestração
-├── GerenciadorBiblioteca.Api/ → (em planejamento) Interface REST
-└── GerenciadorBiblioteca.Tests/ → Testes unitários
-
-```
+- .NET SDK 7.0 ou superior instalado
+- Git configurado no ambiente
+- Editor de código recomendado: Visual Studio ou VS Code
 
 ---
 
-## 🚀 Como executar localmente
+### 🧭 Etapas iniciais para subir o projeto
 
-💻 Pré-requisitos: .NET SDK 7.0+ instalado e ambiente Windows recomendado
+1. **Clone o repositório**
 
-1. **Abra o PowerShell**
-
-   - Pressione `Win + S`, digite “PowerShell” e abra o terminal
-
-2. **Clone este repositório**
-
-   ```powershell
-   git clone https://github.com/VivianeGomes/GerenciadorBiblioteca
+   ```bash
+   git clone https://github.com/VivianeGomes/GerenciadorBiblioteca.API
    ```
 
-3. **Navegue até a pasta do projeto**
+2. **Navegue até a pasta raiz**
 
-   ```powershell
-   cd "$env:USERPROFILE\Documents\GerenciadorBiblioteca"
+   ```bash
+   cd GerenciadorBiblioteca.API
    ```
 
-4. **(Opcional) Verifique os arquivos**
+3. **Restaure os pacotes NuGet**
 
-   ```powershell
-   ls
-   ```
-
-5. **Restaure os pacotes NuGet**
-
-   ```powershell
+   ```bash
    dotnet restore
    ```
 
-6. **Acesse a pasta do Console App**
+4. **Execute a API**
 
-   ```powershell
-   cd .\GerenciadorBiblioteca.App\
+   ```bash
+   dotnet run --project GerenciadorBiblioteca.Api
    ```
 
-7. **Execute o projeto**
-   ```powershell
-   dotnet run
-   ```
+5. **Acesse o Swagger**
+   Abra seu navegador e vá para:  
+   `https://localhost:5001/swagger`
 
-🎉 O menu do Scriptoria aparecerá no console. Agora é só navegar!
-
-> **💡 Observação:** este passo a passo considera um ambiente Windows com .NET previamente instalado e caminho padrão de pastas. Caso esteja usando outro sistema, tenha configurado diretórios diferentes ou esteja partindo de um fork, ajustes podem ser necessários.
+🎉 Pronto! A interface interativa estará disponível para explorar os endpoints.
 
 ---
 
-> ### 🧰 Problemas comuns e dicas (Troubleshooting)
->
-> Se algo não funcionar como esperado, experimente:
->
-> - ⚠️ `.NET` não reconhecido? Verifique se o SDK está no PATH
-> - ❌ `dotnet restore` falhando? Teste:
->   ```bash
->   dotnet nuget locals all --clear
->   ```
-> - 🧭 Usando Linux/macOS? Adapte os comandos de navegação (`cd`, caminhos, barras)
-> - 📁 Forkou ou moveu o projeto? Confirme a estrutura e caminhos corretamente
->
-> 🔍 Use `dotnet --info` para inspecionar o ambiente local
+> 💡 **Dica:** Se estiver usando VS Code, basta abrir a pasta raiz e apertar `F5` para rodar em modo debug com a configuração padrão.
+
+> 🔎 **Observação:** Caso esteja em Linux/macOS, adapte o caminho de arquivos e use `export` no lugar de `$env:` se estiver usando variáveis de ambiente.
 
 ---
 
-## 📸 Exemplo de Uso
+## 🔗 Padrões de Endpoints
 
-Veja abaixo alguns momentos da aplicação em ação:
-
-- 🎬 **Animação de entrada**
-  Uma introdução simples para dar boas-vindas ao Scriptoria
-  ![Animação de entrada](image/README/menu.png)
-
-- 🧙‍♂️ **Menu Principal**
-  Onde a navegação começa — sim, o “Encatação” foi proposital 😄
-  ![Menu principal](image/README/entrada.png)
+- 🏰 **Base URL**: `https://localhost:5001/api`
+- 🧭 **Formato de rota**: `/[controller]/[action]`
+- 📦 **Content-Type**: `application/json`
+- 🌱 **Versionamento planejado**: `/v1/livros`, `/v1/usuarios`, etc.
 
 ---
 
-## ⚙️ Esteira CI/CD – Meu Xodó 💫
+## 📦 Estrutura de Respostas
 
-Mesmo sendo um Console App, o Scriptoria conta com uma pipeline automatizada para manter o fluxo de desenvolvimento suave e sem atritos.
+```json
+{
+  "sucesso": true,
+  "dados": { ... },
+  "erros": []
+}
+```
 
-📸 **Fluxo atual da pipeline:**
-![CI/CD Pipeline](image/README/esteira-cicd.png)
-
-> A esteira executa:
->
-> - Criação de Pull Request direto para a branch `main`
-> - Validação do build e dependências
-> - (Planejado) Gatilhos para testes e deploy quando necessário
-
-Mantém simples e funcional ❤️
-
----
-
-## 📌 Status do Projeto
-
-| Versão         | Status               |
-| -------------- | -------------------- |
-| 🖥️ Console App | ✅ Finalizado        |
-| 🌐 Web API     | 🛠️ Em planejamento   |
-| 🧪 Testes      | 🧱 Estrutura inicial |
+- ✅ `sucesso`: indica êxito na operação
+- 📚 `dados`: o conteúdo retornado (objeto, lista, etc.)
+- 🚨 `erros`: lista de mensagens explicando falhas (se houver)
 
 ---
 
-## 💡 Por que começar com Console App?
+## 🧰 Tratamento de Erros
 
-> “Começar simples não é retrocesso — é construir com inteligência sobre uma base sólida.”
-
-Essa escolha permitiu foco nas regras de domínio e organização da arquitetura. A evolução para uma API robusta será natural e consistente.
+- As validações ocorrem nos **Services**, com mensagens claras
+- Os **Controllers** retornam erro genérico + mensagens amigáveis
+- Um **Middleware personalizado** intercepta exceções e responde com formato padrão
 
 ---
 
-## 💬 Contribuições e Feedback
+## 🧾 Códigos HTTP Utilizados
 
-Este projeto faz parte da minha jornada prática como **dev .NET Jr.**
-Fique à vontade para abrir issues, sugerir melhorias ou trocar ideias — será um prazer 💜
+| Código | Descrição                                  |
+| ------ | ------------------------------------------ |
+| 200    | ✅ OK – operação bem-sucedida              |
+| 201    | ✨ Created – recurso criado                |
+| 400    | ❌ Bad Request – erro na requisição        |
+| 404    | 🔍 Not Found – recurso não encontrado      |
+| 500    | 💥 Internal Server Error – exceção interna |
+
+---
+
+## 🗂️ Convenções dos DTOs
+
+- Os modelos de entrada usam `string?` para valores opcionais
+- O domínio utiliza `string.Empty` como padrão
+- Evita-se a exposição direta do `ModelState`
+
+---
+
+## 📘 POST `/livros` – Cadastrar Novo Livro
+
+**🛠️ Detalhes:**
+
+- **URL**: `https://localhost:5001/api/livros`
+- **Método**: `POST`
+- **Cabeçalhos**:
+  - `Content-Type: application/json`
+
+**📨 Payload:**
+
+```json
+{
+  "titulo": "O Senhor dos Anéis",
+  "autor": "J.R.R. Tolkien",
+  "anoPublicacao": 1954,
+  "genero": "Fantasia"
+}
+```
+
+**✅ Resposta de sucesso:**
+
+```json
+{
+  "sucesso": true,
+  "dados": {
+    "id": 42,
+    "titulo": "O Senhor dos Anéis",
+    "autor": "J.R.R. Tolkien",
+    "anoPublicacao": 1954,
+    "genero": "Fantasia"
+  },
+  "erros": []
+}
+```
+
+**❌ Exemplo de falha:**
+
+```json
+{
+  "sucesso": false,
+  "dados": null,
+  "erros": ["O campo 'titulo' é obrigatório.", "Ano de publicação inválido."]
+}
+```
 
 ---
 
 ## 📄 Licença
 
-Distribuído sob os termos da [Licença MIT](LICENSE).
+Este projeto está licenciado sob os termos da [MIT License](https://opensource.org/licenses/MIT).
+
+---
+
+> 🧱 **Construção em andamento**  
+> Esse projeto ainda tá ganhando forma — mais detalhes, exemplos e encantos técnicos virão nos próximos commits. Fica por perto! 🚀
