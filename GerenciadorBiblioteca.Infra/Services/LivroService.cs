@@ -13,11 +13,29 @@ namespace GerenciadorBiblioteca.Infra.Services
             _livroRepository = livroRepository;
         }
 
-        public void Cadastrar(Livro livro)
+        public LivroDto Cadastrar(CriarLivroDto dto)
         {
+            var livro = new Livro(
+                Guid.NewGuid(),
+                dto.Titulo!,
+                dto.Autor!,
+                dto.Isbn!,
+                dto.AnoPublicacao
+            );
+
             Validar(livro);
             _livroRepository.Adicionar(livro);
+
+            return new LivroDto
+            {
+                Id = livro.Id,
+                Titulo = livro.Titulo,
+                Autor = livro.Autor,
+                AnoPublicacao = livro.AnoPublicacao,
+                Genero = dto.Genero
+            };
         }
+
 
         public bool Validar(Livro livro)
         {
