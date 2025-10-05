@@ -1,8 +1,9 @@
-﻿using GerenciadorBiblioteca.Domain.Entities;
+﻿using GerenciadorBiblioteca.Api.DTOs.Livro;
+using GerenciadorBiblioteca.Domain.Entities;
 using GerenciadorBiblioteca.Domain.Interfaces;
 using GerenciadorBiblioteca.Infra.Validators;
 
-namespace GerenciadorBiblioteca.Infra.Services
+namespace GerenciadorBiblioteca.Api.Services
 {
     public class LivroService : ILivroService
     {
