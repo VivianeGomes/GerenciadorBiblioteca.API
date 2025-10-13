@@ -21,7 +21,8 @@ namespace GerenciadorBiblioteca.Api.Services
                 dto.Titulo!,
                 dto.Autor!,
                 dto.Isbn!,
-                dto.AnoPublicacao
+                dto.AnoPublicacao,
+                dto.Genero!
             );
 
             Validar(livro);

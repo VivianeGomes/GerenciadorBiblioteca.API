@@ -7,6 +7,6 @@ namespace GerenciadorBiblioteca.Domain.Interfaces
         void Adicionar(Emprestimo emprestimo);
         Emprestimo? ObterPorId(Guid id);
         IEnumerable<Emprestimo> ListarTodos();
-        void Atualizar(Emprestimo emprestimo);
+        bool Atualizar(Emprestimo emprestimo);
     }
 }

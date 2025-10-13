@@ -17,23 +17,18 @@ namespace GerenciadorBiblioteca.Infra.Repositories
             return _emprestimos.FirstOrDefault(e => e.Id == id);
         }
 
-        public IEnumerable<Emprestimo?> ListarTodos()
+        public IEnumerable<Emprestimo> ListarTodos()
         {
             return _emprestimos;
         }
 
-        public void Atualizar(Emprestimo emprestimoAtualizado)
+        public bool Atualizar(Emprestimo emprestimoAtualizado)
         {
             var index = _emprestimos.FindIndex(e => e.Id == emprestimoAtualizado.Id);
+            if (index == -1) return false;
 
-            if (index != -1)
-            {
-                _emprestimos[index] = emprestimoAtualizado;
-            }
-            else
-            {
-                Console.WriteLine($"Empréstimo com ID {emprestimoAtualizado.Id} não encontrado.");
-            }
+            _emprestimos[index] = emprestimoAtualizado;
+            return true;
         }
     }
 }

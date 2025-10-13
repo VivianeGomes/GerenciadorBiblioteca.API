@@ -17,7 +17,7 @@ namespace GerenciadorBiblioteca.Infra.Repositories
             return _livros.FirstOrDefault(l => l.Id == id);
         }
 
-        public IEnumerable<Livro?> ListarTodos()
+        public IEnumerable<Livro> ListarTodos()
         {
             return _livros;
         }
