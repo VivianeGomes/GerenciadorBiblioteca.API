@@ -2,5 +2,7 @@
 {
     public class CriarEmprestimoDto
     {
+        public Guid UsuarioId { get; set; }
+        public Guid LivroId { get; set; }
     }
 }
