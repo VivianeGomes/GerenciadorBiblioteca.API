@@ -1,5 +1,9 @@
+using GerenciadorBiblioteca.Api.Interfaces;
 using GerenciadorBiblioteca.Api.Mappings;
-using Microsoft.Extensions.DependencyInjection;
+using GerenciadorBiblioteca.Api.Services;
+using GerenciadorBiblioteca.Domain.Interfaces;
+using GerenciadorBiblioteca.Infra.Repositories;
+using GerenciadorBiblioteca.Infra.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +14,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutoMapper(cfg => {
-    cfg.AddProfile<LivroProfile>();
-    //cfg.AddProfile<UsuarioProfile>();
-    //cfg.AddProfile<EmprestimoProfile>();
-});
+builder.Services.AddAutoMapper(typeof(LivroProfile).Assembly);
 
+builder.Services.AddScoped<ILivroRepository, LivroRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IEmprestimoRepository, EmprestimoRepository>();
+
+builder.Services.AddScoped<ILivroService, LivroService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IEmprestimoService, EmprestimoService>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

@@ -1,13 +1,11 @@
 ﻿using GerenciadorBiblioteca.Api.DTOs.Livro;
-using GerenciadorBiblioteca.Domain.Entities;
 
-namespace GerenciadorBiblioteca.Domain.Interfaces
+namespace GerenciadorBiblioteca.Api.Interfaces;
+
+public interface ILivroService
 {
-    public interface ILivroService
-    {
-        LivroDto Cadastrar(CriarLivroDto dto);
-        IEnumerable<Livro> ListarTodos();
-        Livro? ObterPorId(Guid id);
-        bool Remover(Guid id);
-    }
+    LivroDto Cadastrar(CriarLivroDto dto);
+    IEnumerable<LivroDto> ListarTodos();
+    LivroDto? ObterPorId(Guid id);
+    bool Remover(Guid id);
 }

@@ -1,4 +1,5 @@
-﻿using GerenciadorBiblioteca.Domain.Entities;
+﻿using GerenciadorBiblioteca.Api.Interfaces;
+using GerenciadorBiblioteca.Domain.Entities;
 using GerenciadorBiblioteca.Domain.Interfaces;
 using GerenciadorBiblioteca.Infra.Validators;
 
@@ -21,8 +22,12 @@ namespace GerenciadorBiblioteca.Infra.Services
 
         public bool Validar(Usuario usuario)
         {
-            ValidadorObrigatorio.ValidarTexto(usuario.Nome, nameof(usuario.Nome));
-            ValidadorObrigatorio.ValidarTexto(usuario.Email, nameof(usuario.Email));
+            var validator = new UsuarioValidator();
+
+            if (!validator.IsValid(usuario, out var errors))
+            {
+                throw new ArgumentException(string.Join("; ", errors));
+            }
 
             return true;
         }

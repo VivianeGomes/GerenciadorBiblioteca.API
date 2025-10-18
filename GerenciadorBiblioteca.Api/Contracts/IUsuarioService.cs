@@ -1,6 +1,6 @@
 ﻿using GerenciadorBiblioteca.Domain.Entities;
 
-namespace GerenciadorBiblioteca.Domain.Interfaces
+namespace GerenciadorBiblioteca.Api.Interfaces
 {
     public interface IUsuarioService
     {

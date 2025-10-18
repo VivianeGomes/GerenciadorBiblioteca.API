@@ -1,4 +1,6 @@
-﻿using GerenciadorBiblioteca.Api.DTOs.Livro;
+﻿using AutoMapper;
+using GerenciadorBiblioteca.Api.DTOs.Livro;
+using GerenciadorBiblioteca.Api.Interfaces;
 using GerenciadorBiblioteca.Domain.Entities;
 using GerenciadorBiblioteca.Domain.Interfaces;
 using GerenciadorBiblioteca.Infra.Validators;
@@ -8,55 +10,49 @@ namespace GerenciadorBiblioteca.Api.Services
     public class LivroService : ILivroService
     {
         private readonly ILivroRepository _livroRepository;
+        private readonly IMapper _mapper;
 
-        public LivroService(ILivroRepository livroRepository)
+        public LivroService(ILivroRepository livroRepository, IMapper mapper)
         {
             _livroRepository = livroRepository;
+            _mapper = mapper;
         }
 
         public LivroDto Cadastrar(CriarLivroDto dto)
         {
-            var livro = new Livro(
-                Guid.NewGuid(),
-                dto.Titulo!,
-                dto.Autor!,
-                dto.Isbn!,
-                dto.AnoPublicacao,
-                dto.Genero!
-            );
+            // Usa o AutoMapper para converter DTO → Entidade
+            var livro = _mapper.Map<Livro>(dto);
+            livro.Id = Guid.NewGuid();
 
             Validar(livro);
             _livroRepository.Adicionar(livro);
 
-            return new LivroDto
-            {
-                Id = livro.Id,
-                Titulo = livro.Titulo,
-                Autor = livro.Autor,
-                AnoPublicacao = livro.AnoPublicacao,
-                Genero = dto.Genero
-            };
+            // Usa o AutoMapper para converter Entidade → DTO
+            return _mapper.Map<LivroDto>(livro);
         }
-
 
         public bool Validar(Livro livro)
         {
-            ValidadorObrigatorio.ValidarTexto(livro.Titulo, nameof(livro.Titulo));
-            ValidadorObrigatorio.ValidarTexto(livro.Autor, nameof(livro.Autor));
-            ValidadorObrigatorio.ValidarTexto(livro.Isbn, nameof(livro.Isbn));
-            ValidadorObrigatorio.ValidarAno(livro.AnoPublicacao);
+            var validator = new LivroValidator();
+
+            if (!validator.IsValid(livro, out var errors))
+            {
+                throw new ArgumentException(string.Join("; ", errors));
+            }
 
             return true;
         }
 
-        public IEnumerable<Livro> ListarTodos()
+        public IEnumerable<LivroDto> ListarTodos()
         {
-            return _livroRepository.ListarTodos();
+            var livros = _livroRepository.ListarTodos();
+            return _mapper.Map<IEnumerable<LivroDto>>(livros);
         }
 
-        public Livro? ObterPorId(Guid id)
+        public LivroDto? ObterPorId(Guid id)
         {
-            return _livroRepository.ObterPorId(id);
+            var livro = _livroRepository.ObterPorId(id);
+            return livro == null ? null : _mapper.Map<LivroDto>(livro);
         }
 
         public bool Remover(Guid id)
