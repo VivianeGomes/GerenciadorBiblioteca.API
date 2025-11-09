@@ -17,16 +17,16 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetUsuarios()
+    public async Task<IActionResult> GetUsuarios()
     {
-        var usuarios = _usuarioService.ListarTodos();
+        var usuarios = await _usuarioService.ListarTodosAsync();
         return Ok(new { sucesso = true, dados = usuarios, erros = Array.Empty<string>() });
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetUsuario(Guid id)
+    public async Task<IActionResult> GetUsuario(Guid id)
     {
-        var usuario = _usuarioService.ObterPorId(id);
+        var usuario = await _usuarioService.ObterPorIdAsync(id);
         if (usuario == null)
             return NotFound(new { sucesso = false, dados = (object?)null, erros = new[] { "Usuário não encontrado." } });
 
@@ -34,12 +34,12 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult PostUsuario([FromBody] CriarUsuarioDto dto)
+    public async Task<IActionResult> PostUsuario([FromBody] CriarUsuarioDto dto)
     {
         try
         {
             var usuario = new Usuario(Guid.NewGuid(), dto.Nome!, dto.Email!);
-            _usuarioService.Cadastrar(usuario);
+            await _usuarioService.CadastrarAsync(usuario);
 
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, new { sucesso = true, dados = usuario, erros = Array.Empty<string>() });
         }
@@ -50,9 +50,9 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteUsuario(Guid id)
+    public async Task<IActionResult> DeleteUsuario(Guid id)
     {
-        var removido = _usuarioService.Remover(id);
+        var removido = await _usuarioService.RemoverAsync(id);
         if (!removido)
             return NotFound(new { sucesso = false, dados = (object?)null, erros = new[] { "Usuário não encontrado." } });
 

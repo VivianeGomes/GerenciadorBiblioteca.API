@@ -13,6 +13,8 @@ public class Emprestimo
     public DateTime DataDeEmprestimo { get; set; }
     public DateTime? DataDevolucao { get; set; }
 
+    public Emprestimo() { }
+
     public Emprestimo(Guid id, Guid idLivro, Livro livro, Guid idUsuario, Usuario usuario, DateTime dataDeEmprestimo, DateTime? dataDevolucao)
     {
         Id = id;

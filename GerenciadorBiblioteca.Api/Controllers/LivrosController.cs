@@ -16,16 +16,16 @@ public class LivrosController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetLivros()
+    public async Task<IActionResult> GetLivros()
     {
-        var livros = _livroService.ListarTodos();
+        var livros = await _livroService.ListarTodosAsync();
         return Ok(new { sucesso = true, dados = livros, erros = Array.Empty<string>() });
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetLivro(Guid id)
+    public async Task<IActionResult> GetLivro(Guid id)
     {
-        var livro = _livroService.ObterPorId(id);
+        var livro = await _livroService.ObterPorIdAsync(id);
         if (livro == null)
             return NotFound(new { sucesso = false, dados = (object?)null, erros = new[] { "Livro não encontrado." } });
 
@@ -33,11 +33,11 @@ public class LivrosController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult PostLivro([FromBody] CriarLivroDto dto)
+    public async Task<IActionResult> PostLivro([FromBody] CriarLivroDto dto)
     {
         try
         {
-            var livro = _livroService.Cadastrar(dto);
+            var livro = await _livroService.CadastrarAsync(dto);
             return CreatedAtAction(nameof(GetLivro), new { id = livro.Id }, new { sucesso = true, dados = livro, erros = Array.Empty<string>() });
         }
         catch (ArgumentException ex)
@@ -47,9 +47,9 @@ public class LivrosController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteLivro(Guid id)
+    public async Task<IActionResult> DeleteLivro(Guid id)
     {
-        var removido = _livroService.Remover(id);
+        var removido = await _livroService.RemoverAsync(id);
         if (!removido)
             return NotFound(new { sucesso = false, dados = (object?)null, erros = new[] { "Livro não encontrado." } });
 
