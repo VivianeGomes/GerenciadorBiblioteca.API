@@ -18,16 +18,14 @@ namespace GerenciadorBiblioteca.Api.Services
             _mapper = mapper;
         }
 
-        public LivroDto Cadastrar(CriarLivroDto dto)
+        public async Task<LivroDto> CadastrarAsync(CriarLivroDto dto)
         {
-            // Usa o AutoMapper para converter DTO → Entidade
             var livro = _mapper.Map<Livro>(dto);
             livro.Id = Guid.NewGuid();
 
             Validar(livro);
-            _livroRepository.Adicionar(livro);
+            await _livroRepository.AdicionarAsync(livro);
 
-            // Usa o AutoMapper para converter Entidade → DTO
             return _mapper.Map<LivroDto>(livro);
         }
 
@@ -43,21 +41,21 @@ namespace GerenciadorBiblioteca.Api.Services
             return true;
         }
 
-        public IEnumerable<LivroDto> ListarTodos()
+        public async Task<IEnumerable<LivroDto>> ListarTodosAsync()
         {
-            var livros = _livroRepository.ListarTodos();
+            var livros = await _livroRepository.ListarTodosAsync();
             return _mapper.Map<IEnumerable<LivroDto>>(livros);
         }
 
-        public LivroDto? ObterPorId(Guid id)
+        public async Task<LivroDto?> ObterPorIdAsync(Guid id)
         {
-            var livro = _livroRepository.ObterPorId(id);
+            var livro = await _livroRepository.ObterPorIdAsync(id);
             return livro == null ? null : _mapper.Map<LivroDto>(livro);
         }
 
-        public bool Remover(Guid id)
+        public async Task<bool> RemoverAsync(Guid id)
         {
-            return _livroRepository.Remover(id);
+            return await _livroRepository.RemoverAsync(id);
         }
     }
 }

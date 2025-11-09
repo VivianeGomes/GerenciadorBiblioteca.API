@@ -4,9 +4,9 @@ namespace GerenciadorBiblioteca.Domain.Interfaces
 {
     public interface ILivroRepository
     {
-        void Adicionar(Livro livro);
-        Livro? ObterPorId(Guid id);
-        IEnumerable<Livro> ListarTodos();
-        bool Remover(Guid id);
+        Task AdicionarAsync(Livro livro);
+        Task<Livro?> ObterPorIdAsync(Guid id);
+        Task<IEnumerable<Livro>> ListarTodosAsync();
+        Task<bool> RemoverAsync(Guid id);
     }
 }

@@ -4,9 +4,9 @@ namespace GerenciadorBiblioteca.Api.Interfaces
 {
     public interface IUsuarioService
     {
-        void Cadastrar(Usuario usuario);
-        IEnumerable<Usuario> ListarTodos();
-        Usuario? ObterPorId(Guid id);
-        bool Remover(Guid id);
+        Task CadastrarAsync(Usuario usuario);
+        Task<IEnumerable<Usuario>> ListarTodosAsync();
+        Task<Usuario?> ObterPorIdAsync(Guid id);
+        Task<bool> RemoverAsync(Guid id);
     }
 }

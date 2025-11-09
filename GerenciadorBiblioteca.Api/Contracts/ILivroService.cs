@@ -4,8 +4,8 @@ namespace GerenciadorBiblioteca.Api.Interfaces;
 
 public interface ILivroService
 {
-    LivroDto Cadastrar(CriarLivroDto dto);
-    IEnumerable<LivroDto> ListarTodos();
-    LivroDto? ObterPorId(Guid id);
-    bool Remover(Guid id);
+    Task<LivroDto> CadastrarAsync(CriarLivroDto dto);
+    Task<IEnumerable<LivroDto>> ListarTodosAsync();
+    Task<LivroDto?> ObterPorIdAsync(Guid id);
+    Task<bool> RemoverAsync(Guid id);
 }

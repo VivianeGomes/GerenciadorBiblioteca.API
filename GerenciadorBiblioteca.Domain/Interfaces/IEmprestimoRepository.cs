@@ -4,9 +4,9 @@ namespace GerenciadorBiblioteca.Domain.Interfaces
 {
     public interface IEmprestimoRepository
     {
-        void Adicionar(Emprestimo emprestimo);
-        Emprestimo? ObterPorId(Guid id);
-        IEnumerable<Emprestimo> ListarTodos();
-        bool Atualizar(Emprestimo emprestimo);
+        Task AdicionarAsync(Emprestimo emprestimo);
+        Task<Emprestimo?> ObterPorIdAsync(Guid id);
+        Task<IEnumerable<Emprestimo>> ListarTodosAsync();
+        Task<bool> AtualizarAsync(Emprestimo emprestimo);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using GerenciadorBiblioteca.Api.Interfaces;
-using GerenciadorBiblioteca.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorBiblioteca.Api.Controllers;
@@ -16,16 +15,16 @@ public class EmprestimosController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetEmprestimos()
+    public async Task<IActionResult> GetEmprestimos()
     {
-        var emprestimos = _emprestimoService.ListarTodos();
+        var emprestimos = await _emprestimoService.ListarTodosAsync();
         return Ok(new { sucesso = true, dados = emprestimos, erros = Array.Empty<string>() });
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetEmprestimo(Guid id)
+    public async Task<IActionResult> GetEmprestimo(Guid id)
     {
-        var emprestimo = _emprestimoService.ObterPorId(id);
+        var emprestimo = await _emprestimoService.ObterPorIdAsync(id);
         if (emprestimo == null)
             return NotFound(new { sucesso = false, dados = (object?)null, erros = new[] { "Empréstimo não encontrado." } });
 
@@ -33,11 +32,11 @@ public class EmprestimosController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult RegistrarEmprestimo(Guid idLivro, Guid idUsuario)
+    public async Task<IActionResult> RegistrarEmprestimo(Guid idLivro, Guid idUsuario)
     {
         try
         {
-            _emprestimoService.RegistrarEmprestimo(idLivro, idUsuario);
+            await _emprestimoService.RegistrarEmprestimoAsync(idLivro, idUsuario);
             return Ok(new { sucesso = true, dados = "Empréstimo registrado com sucesso!", erros = Array.Empty<string>() });
         }
         catch (ArgumentException ex)
@@ -47,11 +46,11 @@ public class EmprestimosController : ControllerBase
     }
 
     [HttpPut("{id:guid}/devolucao")]
-    public IActionResult Devolver(Guid id)
+    public async Task<IActionResult> Devolver(Guid id)
     {
         try
         {
-            _emprestimoService.Devolver(id);
+            await _emprestimoService.DevolverAsync(id);
             return Ok(new { sucesso = true, dados = "Livro devolvido com sucesso!", erros = Array.Empty<string>() });
         }
         catch (ArgumentException ex)
@@ -61,11 +60,11 @@ public class EmprestimosController : ControllerBase
     }
 
     [HttpGet("{id:guid}/atraso")]
-    public IActionResult MensagemDeAtraso(Guid id)
+    public async Task<IActionResult> MensagemDeAtraso(Guid id)
     {
         try
         {
-            var mensagem = _emprestimoService.GerarMensagemDeAtraso(id);
+            var mensagem = await _emprestimoService.GerarMensagemDeAtrasoAsync(id);
             return Ok(new { sucesso = true, dados = mensagem, erros = Array.Empty<string>() });
         }
         catch (ArgumentException ex)

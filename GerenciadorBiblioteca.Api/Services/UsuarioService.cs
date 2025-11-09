@@ -3,48 +3,47 @@ using GerenciadorBiblioteca.Domain.Entities;
 using GerenciadorBiblioteca.Domain.Interfaces;
 using GerenciadorBiblioteca.Infra.Validators;
 
-namespace GerenciadorBiblioteca.Infra.Services
+namespace GerenciadorBiblioteca.Infra.Services;
+
+public class UsuarioService : IUsuarioService
 {
-    public class UsuarioService : IUsuarioService
+    private readonly IUsuarioRepository _usuarioRepository;
+
+    public UsuarioService(IUsuarioRepository usuarioRepository)
     {
-        private readonly IUsuarioRepository _usuarioRepository;
+        _usuarioRepository = usuarioRepository;
+    }
 
-        public UsuarioService(IUsuarioRepository usuarioRepository)
+    public async Task CadastrarAsync(Usuario usuario)
+    {
+        Validar(usuario);
+        await _usuarioRepository.AdicionarAsync(usuario);
+    }
+
+    public bool Validar(Usuario usuario)
+    {
+        var validator = new UsuarioValidator();
+
+        if (!validator.IsValid(usuario, out var errors))
         {
-            _usuarioRepository = usuarioRepository;
+            throw new ArgumentException(string.Join("; ", errors));
         }
 
-        public void Cadastrar(Usuario usuario)
-        {
-            Validar(usuario);
-            _usuarioRepository.Adicionar(usuario);
-        }
+        return true;
+    }
 
-        public bool Validar(Usuario usuario)
-        {
-            var validator = new UsuarioValidator();
+    public async Task<IEnumerable<Usuario>> ListarTodosAsync()
+    {
+        return await _usuarioRepository.ListarTodosAsync();
+    }
 
-            if (!validator.IsValid(usuario, out var errors))
-            {
-                throw new ArgumentException(string.Join("; ", errors));
-            }
+    public async Task<Usuario?> ObterPorIdAsync(Guid id)
+    {
+        return await _usuarioRepository.ObterPorIdAsync(id);
+    }
 
-            return true;
-        }
-
-        public IEnumerable<Usuario> ListarTodos()
-        {
-            return _usuarioRepository.ListarTodos();
-        }
-
-        public Usuario? ObterPorId(Guid id)
-        {
-            return _usuarioRepository.ObterPorId(id);
-        }
-
-        public bool Remover(Guid id)
-        {
-            return _usuarioRepository.Remover(id);
-        }
+    public async Task<bool> RemoverAsync(Guid id)
+    {
+        return await _usuarioRepository.RemoverAsync(id);
     }
 }

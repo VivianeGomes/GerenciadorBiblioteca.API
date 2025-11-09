@@ -4,6 +4,8 @@ using GerenciadorBiblioteca.Api.Services;
 using GerenciadorBiblioteca.Domain.Interfaces;
 using GerenciadorBiblioteca.Infra.Repositories;
 using GerenciadorBiblioteca.Infra.Services;
+using GerenciadorBiblioteca.Infra;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(LivroProfile).Assembly);
+
+builder.Services.AddDbContext<BibliotecaDbContext>(options =>
+    options.UseInMemoryDatabase("BibliotecaDb"));
 
 builder.Services.AddScoped<ILivroRepository, LivroRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();

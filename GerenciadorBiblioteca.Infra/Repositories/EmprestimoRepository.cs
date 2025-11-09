@@ -1,33 +1,47 @@
 ﻿using GerenciadorBiblioteca.Domain.Entities;
 using GerenciadorBiblioteca.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorBiblioteca.Infra.Repositories
 {
     public class EmprestimoRepository : IEmprestimoRepository
     {
-        private static readonly List<Emprestimo> _emprestimos = new();
+        private readonly BibliotecaDbContext _context;
 
-        public void Adicionar(Emprestimo emprestimo)
+        public EmprestimoRepository(BibliotecaDbContext context)
         {
-            _emprestimos.Add(emprestimo);
+            _context = context;
         }
 
-        public Emprestimo? ObterPorId(Guid id)
+        public async Task AdicionarAsync(Emprestimo emprestimo)
         {
-            return _emprestimos.FirstOrDefault(e => e.Id == id);
+            await _context.Emprestimos.AddAsync(emprestimo);
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Emprestimo> ListarTodos()
+        public async Task<Emprestimo?> ObterPorIdAsync(Guid id)
         {
-            return _emprestimos;
+            return await _context.Emprestimos
+                .Include(e => e.Livro)
+                .Include(e => e.Usuario)
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public bool Atualizar(Emprestimo emprestimoAtualizado)
+        public async Task<IEnumerable<Emprestimo>> ListarTodosAsync()
         {
-            var index = _emprestimos.FindIndex(e => e.Id == emprestimoAtualizado.Id);
-            if (index == -1) return false;
+            return await _context.Emprestimos
+                .Include(e => e.Livro)
+                .Include(e => e.Usuario)
+                .ToListAsync();
+        }
 
-            _emprestimos[index] = emprestimoAtualizado;
+        public async Task<bool> AtualizarAsync(Emprestimo emprestimoAtualizado)
+        {
+            var existente = await _context.Emprestimos.FindAsync(emprestimoAtualizado.Id);
+            if (existente == null) return false;
+
+            _context.Entry(existente).CurrentValues.SetValues(emprestimoAtualizado);
+            await _context.SaveChangesAsync();
             return true;
         }
     }

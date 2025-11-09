@@ -22,31 +22,31 @@ public class EmprestimoService : IEmprestimoService
         _emprestimoRepository = emprestimoRepository;
     }
 
-    public void RegistrarEmprestimo(Guid idLivro, Guid idUsuario)
+    public async Task RegistrarEmprestimoAsync(Guid idLivro, Guid idUsuario)
     {
-        var livro = _livroRepository.ObterPorId(idLivro);
-        var usuario = _usuarioRepository.ObterPorId(idUsuario);
+        var livro = await _livroRepository.ObterPorIdAsync(idLivro);
+        var usuario = await _usuarioRepository.ObterPorIdAsync(idUsuario);
 
         if (livro == null)
-        {
             throw new ArgumentException($"Livro com ID {idLivro} não encontrado.");
-        }
+
         if (usuario == null)
-        {
             throw new ArgumentException($"Usuário com ID {idUsuario} não encontrado.");
-        }
 
         var emprestimo = new Emprestimo
         (
             Guid.NewGuid(),
             idLivro,
+            livro,
             idUsuario,
-            DateTime.Now
+            usuario,
+            DateTime.Now,
+            DateTime.Now.AddDays(PRAZO_PADRAO_EM_DIAS)
         );
 
         ValidarEmprestimo(emprestimo);
 
-        _emprestimoRepository.Adicionar(emprestimo);
+        await _emprestimoRepository.AdicionarAsync(emprestimo);
     }
 
     private void ValidarEmprestimo(Emprestimo emprestimo)
@@ -59,32 +59,32 @@ public class EmprestimoService : IEmprestimoService
         }
     }
 
-    public IEnumerable<Emprestimo> ListarTodos()
+    public async Task<IEnumerable<Emprestimo>> ListarTodosAsync()
     {
-        return _emprestimoRepository.ListarTodos();
+        return await _emprestimoRepository.ListarTodosAsync();
     }
 
-    public Emprestimo? ObterPorId(Guid id)
+    public async Task<Emprestimo?> ObterPorIdAsync(Guid id)
     {
-        return _emprestimoRepository.ObterPorId(id);
+        return await _emprestimoRepository.ObterPorIdAsync(id);
     }
 
-    public void DefinirDataDevolucao(Guid idEmprestimo, DateTime? dataDevolucao)
+    public async Task DefinirDataDevolucaoAsync(Guid idEmprestimo, DateTime? dataDevolucao)
     {
-        var emprestimo = ValidarEmprestimoExistente(idEmprestimo);
+        var emprestimo = await ValidarEmprestimoExistenteAsync(idEmprestimo);
 
         emprestimo.DataDevolucao = dataDevolucao ?? DateTime.Now;
-        _emprestimoRepository.Atualizar(emprestimo);
+        await _emprestimoRepository.AtualizarAsync(emprestimo);
     }
 
-    public void Devolver(Guid idEmprestimo)
+    public async Task DevolverAsync(Guid idEmprestimo)
     {
-        DefinirDataDevolucao(idEmprestimo, DateTime.Now);
+        await DefinirDataDevolucaoAsync(idEmprestimo, DateTime.Now);
     }
 
-    public string GerarMensagemDeAtraso(Guid idEmprestimo)
+    public async Task<string> GerarMensagemDeAtrasoAsync(Guid idEmprestimo)
     {
-        var emprestimo = ValidarEmprestimoExistente(idEmprestimo);
+        var emprestimo = await ValidarEmprestimoExistenteAsync(idEmprestimo);
 
         var dataEmprestimo = emprestimo.DataDeEmprestimo;
         var dataLimite = dataEmprestimo.AddDays(PRAZO_PADRAO_EM_DIAS);
@@ -104,17 +104,13 @@ public class EmprestimoService : IEmprestimoService
         }
     }
 
-    private Emprestimo ValidarEmprestimoExistente(Guid idEmprestimo)
+    private async Task<Emprestimo> ValidarEmprestimoExistenteAsync(Guid idEmprestimo)
     {
-        var emprestimo = _emprestimoRepository.ObterPorId(idEmprestimo);
+        var emprestimo = await _emprestimoRepository.ObterPorIdAsync(idEmprestimo);
 
         if (emprestimo == null)
-        {
             throw new ArgumentException($"Empréstimo com ID {idEmprestimo} não encontrado.");
-        }
 
         return emprestimo;
     }
-
-
 }
