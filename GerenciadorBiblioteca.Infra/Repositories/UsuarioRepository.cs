@@ -1,33 +1,41 @@
 ﻿using GerenciadorBiblioteca.Domain.Entities;
 using GerenciadorBiblioteca.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorBiblioteca.Infra.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
-        private static readonly List<Usuario> _usuarios = new();
+        private readonly BibliotecaDbContext _context;
 
-        public void Adicionar(Usuario usuario)
+        public UsuarioRepository(BibliotecaDbContext context)
         {
-            _usuarios.Add(usuario);
+            _context = context;
         }
 
-        public Usuario? ObterPorId(Guid id)
+        public async Task AdicionarAsync(Usuario usuario)
         {
-            return _usuarios.FirstOrDefault(u => u.Id == id);
+            await _context.Usuarios.AddAsync(usuario);
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Usuario> ListarTodos()
+        public async Task<Usuario?> ObterPorIdAsync(Guid id)
         {
-            return _usuarios;
+            return await _context.Usuarios.FindAsync(id);
         }
 
-        public bool Remover(Guid id)
+        public async Task<IEnumerable<Usuario>> ListarTodosAsync()
         {
-            var usuario = ObterPorId(id);
+            return await _context.Usuarios.ToListAsync();
+        }
+
+        public async Task<bool> RemoverAsync(Guid id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null) return false;
 
-            _usuarios.Remove(usuario);
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
             return true;
         }
     }
